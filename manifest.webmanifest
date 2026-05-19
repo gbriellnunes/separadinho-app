@@ -1,0 +1,16 @@
+{
+  "name": "Separadinho",
+  "short_name": "Separadinho",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eff3fa",
+  "theme_color": "#eff3fa",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

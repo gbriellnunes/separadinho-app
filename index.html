@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f8fb" />
+    <title>Separadinho</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="app-card">
+        <header class="topbar">
+          <button class="glass-button" id="menuButton" type="button" aria-label="Menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="brand">
+            <span>Separadinho</span>
+            <strong>Reservas virtuais</strong>
+          </div>
+          <button class="glass-button" id="themeButton" type="button" aria-label="Abrir temas">
+            <i data-lucide="palette"></i>
+          </button>
+        </header>
+
+        <section class="view" id="reservesView">
+          <section class="hero-balance" id="editBalance" role="button" tabindex="0">
+            <div class="hero-label">
+              <span>Saldo total</span>
+              <i data-lucide="pencil-line"></i>
+            </div>
+            <strong id="totalBalance">R$ 2.000,00</strong>
+            <p>O dinheiro continua no seu banco. Aqui você só organiza mentalmente.</p>
+          </section>
+
+          <section class="balance-row">
+            <article class="metric-card">
+              <div class="metric-icon blue">
+                <i data-lucide="wallet"></i>
+              </div>
+              <span>Livre</span>
+              <strong id="freeBalance">R$ 1.620,00</strong>
+            </article>
+            <article class="metric-card">
+              <div class="metric-icon yellow">
+                <i data-lucide="archive"></i>
+              </div>
+              <span>Reservado</span>
+              <strong id="reservedBalance">R$ 380,00</strong>
+            </article>
+          </section>
+
+          <section class="reserve-heading">
+            <div>
+              <span>Organização</span>
+              <h1>Reservas virtuais</h1>
+            </div>
+            <button class="add-button" id="addReserve" type="button" aria-label="Adicionar reserva">
+              <i data-lucide="plus"></i>
+            </button>
+          </section>
+
+          <section class="reserve-list" id="reserveList" aria-live="polite"></section>
+        </section>
+
+        <section class="view about-view" id="aboutView" hidden>
+          <div class="about-hero">
+            <div class="about-icon">
+              <i data-lucide="sparkles"></i>
+            </div>
+            <span>Sobre o app</span>
+            <h1>Seu dinheiro separadinho, sem sair do lugar.</h1>
+          </div>
+
+          <article class="about-card">
+            <h2>O que é o Separadinho?</h2>
+            <p>
+              O Separadinho deixa seu dinheiro todo separadinho na sua cabeça, sem tirar um centavo
+              do lugar. Ele não acessa banco, não faz Pix, não transfere saldo e não movimenta
+              dinheiro real.
+            </p>
+            <p>
+              A ideia é simples: você informa quanto tem guardado e cria reservas virtuais para
+              compromissos, metas ou gastos futuros. Assim fica mais fácil enxergar quanto ainda
+              está realmente livre.
+            </p>
+          </article>
+
+          <article class="about-card">
+            <h2>Como o cálculo funciona?</h2>
+            <p>
+              O app soma todas as reservas criadas e calcula automaticamente:
+              <strong>Saldo livre = saldo total - reservas virtuais.</strong>
+            </p>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="modal" id="balanceModal">
+      <form method="dialog" class="sheet" id="balanceForm">
+        <div class="sheet-header">
+          <h2>Saldo total</h2>
+          <button type="button" class="close-button" data-close="balanceModal" aria-label="Fechar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <label>
+          Valor guardado
+          <input id="balanceInput" inputmode="decimal" placeholder="2000,00" />
+        </label>
+        <button class="primary-button" type="submit">Salvar</button>
+      </form>
+    </dialog>
+
+    <dialog class="modal theme-modal" id="themeModal">
+      <form method="dialog" class="sheet">
+        <div class="sheet-header">
+          <h2>Temas</h2>
+          <button type="button" class="close-button" data-close="themeModal" aria-label="Fechar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <p class="theme-copy">Escolha uma inspiração visual. Não usamos logos nem conexão com bancos.</p>
+        <div class="theme-grid" id="themeGrid"></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="reserveModal">
+      <form method="dialog" class="sheet" id="reserveForm">
+        <div class="sheet-header">
+          <h2 id="reserveModalTitle">Nova reserva</h2>
+          <button type="button" class="close-button" data-close="reserveModal" aria-label="Fechar">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <input id="reserveId" type="hidden" />
+
+        <label>
+          Nome
+          <input id="reserveName" maxlength="30" placeholder="Cartão" />
+        </label>
+
+        <label>
+          Valor
+          <input id="reserveAmount" inputmode="decimal" placeholder="200,00" />
+        </label>
+
+        <div class="picker">
+          <span>Ícone</span>
+          <div class="options" id="iconOptions"></div>
+        </div>
+
+        <div class="picker">
+          <span>Cor</span>
+          <div class="options" id="colorOptions"></div>
+        </div>
+
+        <div class="actions">
+          <button class="delete-button" id="deleteReserve" type="button">Remover</button>
+          <button class="primary-button" type="submit">Salvar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+    <aside class="drawer" id="drawer" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <span>Menu</span>
+          <strong>Separadinho</strong>
+        </div>
+        <button class="close-button" id="closeDrawer" type="button" aria-label="Fechar menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <nav class="drawer-nav" aria-label="Seções">
+        <button type="button" data-action="reserves">
+          <i data-lucide="wallet-cards"></i>
+          <span>Reservas virtuais</span>
+        </button>
+        <button type="button" data-action="about">
+          <i data-lucide="info"></i>
+          <span>Sobre o app</span>
+        </button>
+        <button type="button" data-action="theme">
+          <i data-lucide="paintbrush"></i>
+          <span>Temas</span>
+        </button>
+      </nav>
+
+      <div class="drawer-note">
+        <i data-lucide="shield-check"></i>
+        <p>O app não movimenta dinheiro real. Ele apenas separa valores para organização.</p>
+      </div>
+    </aside>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
